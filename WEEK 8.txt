@@ -1,0 +1,77 @@
+create table emp(
+eid int PRIMARY KEY,
+ename varchar(20),
+age int,
+salary real
+);
+
+create table dept(
+did int PRIMARY KEY,
+dname varchar(20),
+budget real,
+managerid int
+);
+
+create table works(
+eid int REFERENCES emp(eid),
+did int REFERENCES dept(did),
+pct_time int,
+PRIMARY KEY(eid,did)
+);
+
+
+insert into emp values(1,'Hari',34,40000);
+insert into emp values(2,'SS',42,45000);
+insert into emp values(3,'DIV',37,38000);
+insert into emp values(4,'APPY',39,42000);
+
+insert into dept values(21,'SOFTWARE',1100000,2);
+insert into dept values(22,'HARDWARE',30000,4);
+insert into dept values(23,'MANAGEMENT',3500000,1);
+insert into dept values(24,'MESS',2000000,1);
+
+insert into works values(1,23,6);
+insert into works values(2,21,10);
+insert into works values(3,22,9);
+insert into works values(4,22,8);
+insert into works values(1,24,5);
+
+
+A.SELECT ename,age
+FROM Emp JOIN Works W1 ON Emp.eid=W1.eid
+JOIN Dept D1 ON W1.did=D1.did JOIN Works W2 ON Emp.eid = W2.eid JOIN Dept D2 ON W2.did=D2.did
+WHERE D1.dname LIKE 'Hardware' AND D2.dname LIKE 'Software';
+
+
+B.SELECT did,COUNT(eid) FROM Works
+GROUP BY did
+HAVING SUM(pct_time)>20*100;
+
+C.SELECT ename
+FROM Emp
+WHERE salary>ALL(SELECT budget
+FROM Works JOIN Dept USING (did) WHERE Works.eid=Emp.eid);
+
+D.SELECT managerid
+FROM Dept
+GROUP BY managerid
+HAVING MIN(budget)>1000000;
+
+E.SELECT ename
+FROM Emp JOIN Dept ON Emp.eid=Dept.managerid
+WHERE budget=(SELECT MAX(budget) FROM Dept);
+
+F.SELECT managerid
+FROM Dept
+GROUP BY managerid
+HAVING SUM(budget)>5M;
+
+G.SELECT managerid
+FROM Dept
+GROUP BY managerid
+HAVING SUM(budget)>=ALL(SELECT SUM(budget) FROM Dept
+GROUP BY managerid);
+
+
+
+
