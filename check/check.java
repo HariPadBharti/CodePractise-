@@ -10,7 +10,7 @@ public class check {
 	  		p=a/10;
 	  		q=a%10;
 
-	  		if((p==7)||(q==7))      // we can also add p=q || p = 7
+	  		if((p==7)||(q==7))      // we can also add p=q || p = 7 || q = 7
 	  		{
 	  			count++;
 	  		}
